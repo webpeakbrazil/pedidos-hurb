@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Zoho Desk - Apps</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+	<div class="flex">
+		<h1>Dados do Cliente</h1>
+		<button id="clienteBtn">+</button>
+	</div>
+
+	<div class="card">
+		<p>Escolha uma tabulação</p>
+
+		<div class="flex">
+			<select id="filterSelect">
+				<option value="all">Escolha uma opção</option>
+				<option value="pending">Pendente</option>
+				<option value="delivered">Entregue</option>
+				<option value="cancelled">Cancelado</option>
+			</select>
+
+			<input type="text" id="email" placeholder="Digite o e-mail ou cpf">
+
+			<button class="searchBtn">Buscar</button>
+		</div>
+	</div>
+
+	<br>
+
+	<div class="card2">
+		<div class="flex2">
+			<input type="text" id="searchInput" placeholder="Buscar por número do pedido">
+
+			<button id="searchButton" class="searchBtn">Buscar</button>
+		</div>
+		<table id="ordersTable">
+			<thead>
+				<tr>
+					<th>Número do pedido</th>
+					<th>Nome da oferta</th>
+					<th>Status do pedido</th>
+					<th>Valor da compra</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="pedido">123</td>
+					<td>Oferta 1</td>
+					<td class="status">Pendente</td>
+					<td>R$ 50,00</td>
+				</tr>
+				<tr>
+					<td class="pedido">456</td>
+					<td>Oferta 2</td>
+					<td class="status">Entregue</td>
+					<td>R$ 30,00</td>
+				</tr>
+				<tr>
+					<td class="pedido">789</td>
+					<td>Oferta 3</td>
+					<td class="status">Cancelado</td>
+					<td>R$ 20,00</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+
+	<script>
+		document.getElementById('searchButton').addEventListener('click', function () {
+			var input, filter, table, tr, td, i, txtValue;
+			input = document.getElementById('searchInput');
+			filter = input.value.toUpperCase();
+			table = document.getElementById('ordersTable');
+			tr = table.getElementsByTagName('tr');
+
+			for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName('td')[0];
+				if (td) {
+					txtValue = td.textContent || td.innerText;
+					if (txtValue.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = '';
+					} else {
+						tr[i].style.display = 'none';
+					}
+				}
+			}
+		});
+	</script>
+
+	<script src="https://js.zohostatic.com/support/developer_sdk/v1/js/ZohoDeskClientSDK.min.js"></script>
+	<script>
+		window.onload = function () {
+			ZOHODESK.extension.onload().then(function (App) {
+
+				// To get particular property of contact info
+				ZOHODESK.get("contact.email").then(function (response) {
+					console.log(response["contact.email"]);
+					document.getElementById("email").value = response["contact.email"];
+					// your code here...
+				}).catch(function (error) {
+					// handle error here...
+				})
+
+				const buttonCliente = document.getElementById("clienteBtn");
+
+				buttonCliente.addEventListener("click", (event) => {
+					//Example for configuring modal box
+					App.instance.modal({
+						url: '/app/cliente.html',
+						title: "Modal box"
+					}).then(function (modalInfo) {
+						var modalInstance = App.instance.getWidgetInstance(modalInfo.widgetID);
+						modalInstance.on('modal.opened', function (data) {
+							console.log('modal opened ++++++++++++++++++')
+						});
+					}).catch(function (err) {
+						console.log(err, "Modal error");
+					})
+				});
+
+				document.querySelectorAll('.pedido').forEach(item => {
+					item.addEventListener('click', event => {
+						const pedidoNumero = item.textContent;
+						localStorage.setItem('pedidoNumero', pedidoNumero);
+						//Example for configuring modal box
+						App.instance.modal({
+							url: '/app/pedido.html',
+							title: "Modal box"
+						}).then(function (modalInfo) {
+							var modalInstance = App.instance.getWidgetInstance(modalInfo.widgetID);
+							modalInstance.on('modal.opened', function (data) {
+								console.log('modal opened ++++++++++++++++++')
+							});
+						}).catch(function (err) {
+							console.log(err, "Modal error");
+						})
+					});
+				});
+			});
+		};
+	</script>
+
+	<script src="./js/extension.js" charset="utf-8"></script>
+
+</body>
+
+</html>
