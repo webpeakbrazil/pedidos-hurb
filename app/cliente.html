@@ -940,45 +940,60 @@
 
                 // console.log("updatedData", updatedData);
 
-                ZOHODESK.set("contact", updatedData).then(function (ticketUpdated) {
-                    console.log("contact ticketUpdated", ticketUpdated);
-                    // your code here...
-                }).catch(function (err) {
-                    console.error('Error updating contact information:', err);
-                    // handle error here...
-                })
+                // ZOHODESK.set("contact.firstName", {firstName: String(document.getElementById("firstName").value)}).then(function (ticketUpdated) {
+                //     console.log("contact ticketUpdated", ticketUpdated);
+                //     // your code here...
+                // }).catch(function (err) {
+                //     console.error('Error updating contact information:', err);
+                //     // handle error here...
+                // })
 
                 // Updating contact data
                 // let requestObj =
                 // {
                 //     "url": "https://desk.zoho.com/api/v1/contacts/" + contactId,
                 //     "headers": {
-                //         "Content-type": "application/json"
+                //         "Content-type": "application/json",
+                //         'orgId': '819609396',
                 //     },
                 //     "type": "PATCH",
                 //     "postBody": updatedData,
                 //     "connectionLinkName": "getTicket-zohodesk",
                 //     "data": {}
                 // }
-                // ZOHODESK.request(requestObj).then(function (updateResponse) {
-                //     // Logging update updateResponse from Desk Zoho API
-                //     // console.log("Desk Zoho API contacts update", updateResponse);
 
-                //     const data = JSON.parse(updateResponse);
-                //     // console.log("JSON.parse(updateResponse)", JSON.parse(updateResponse));
+                console.log("contactId", contactId);
+                
+                // Updating contact data
+                let requestObj =
+                {
+                    "url": "https://desk.zoho.com/api/v1/contacts/" + contactId,
+                    "headers": {
+                        "Content-type": "application/json"
+                    },
+                    "type": "PATCH",
+                    "postBody": updatedData,
+                    "connectionLinkName": "zohodesk",
+                    "data": {}
+                }
+                ZOHODESK.request(requestObj).then(function (updateResponse) {
+                    // Logging update updateResponse from Desk Zoho API
+                    // console.log("Desk Zoho API contacts update", updateResponse);
 
-                //     const response = JSON.parse(data?.response);
-                //     // console.log("data?.response", response);
+                    const data = JSON.parse(updateResponse);
+                    // console.log("JSON.parse(updateResponse)", JSON.parse(updateResponse));
 
-                //     const statusMessage = response?.statusMessage;
-                //     // console.log("response?.statusMessage", statusMessage);
+                    const response = JSON.parse(data?.response);
+                    // console.log("data?.response", response);
 
-                //     document.getElementById("atualizar").innerText = "Contato atualizado";
-                //     // alert("Dados do contato atualizado");
-                // }).catch(function (err) {
-                //     // Error handling for updating contact information
-                //     console.error('Error updating Desk Zoho API contacts information:', err);
-                // })
+                    const statusMessage = response?.statusMessage;
+                    // console.log("response?.statusMessage", statusMessage);
+
+                    alert("Dados do contato atualizado");
+                }).catch(function (err) {
+                    // Error handling for updating contact information
+                    console.error('Error updating Desk Zoho API contacts information:', err);
+                })
             });
         };
     </script>

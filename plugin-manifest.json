@@ -24,8 +24,8 @@
   },
   "zohoAuthorisation": {
     "type": "connectors",
-    "connectionLinkName": "2360a557-d3c6-412c-9d39-4c8f21d5f2ed-819609396_881662000001246115-zohodesk",
-    "connectionName": "getTicket-zohodesk",
+    "connectionLinkName": "zohodesk",
+    "connectionName": "zohodesk",
     "serviceName": "zlabs_integration",
     "userAccess": true,
     "isUserDefinedService": false,
